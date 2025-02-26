@@ -25,7 +25,7 @@ const ReadingYears = (props) => {
         if(!localStorage.getItem('year')){
             localStorage.setItem('year', new Date().getFullYear());
         }
-    }, [years])
+    }, [])
 
     return(
         <div className="readingyears">

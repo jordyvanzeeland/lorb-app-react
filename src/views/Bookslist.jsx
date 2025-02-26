@@ -2,34 +2,48 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import AddBook from "../components/AddBook";
 import ReadingYears from "../components/ReadingYears";
+import { getBooksByYear, currentlyReading } from "../data/Books";
 
 const Bookslist = (props) => {
     const [books, setBooks] = useState([]);
+    const [current, setCurrent] = useState([]);
 
-    const getBooks = async () => {
-        const booksList = await fetch(`http://localhost:8000/api/books/year/2025`, {
-            method: 'GET',
-            headers: {
-                "Authorization": "Bearer" + localStorage.getItem('token'),
-                "Accept": "application/json"
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            return data;
-        })
-
+    const getBooks = async (year) => {
+        const booksList = await getBooksByYear(year);
         setBooks(booksList);
     }
 
+    const getCurrentReading = async () => {
+        const currentBook = await currentlyReading();
+        console.log(currentBook);
+        setCurrent(currentBook);
+    }
+
     useEffect(() => {
-        getBooks();
+        getCurrentReading();
+        getBooks(localStorage.getItem('year') ? localStorage.getItem('year') : new Date().getFullYear() );
+
+        document.querySelector('.readingyears').addEventListener('click', function(event) {
+            if (event.target.classList.contains('yearbtn')) {
+                
+                for (var item of event.target.parentNode.children) {
+                    item.classList.remove('current');
+                }
+                
+                event.target.classList.add('current');
+                
+                const clickedyear = event.target.dataset.id;
+                localStorage.setItem('year', clickedyear);
+                getBooks(clickedyear);
+            }
+        });
     }, [])
 
     return(
         <React.Fragment>
             <Header />
             <div className="container">
+                <div className="currentlyReading"><strong>Currently Reading:</strong> {current && current[0] ? current[0].name + '-' + current[0].author : ''}</div>
                 <ReadingYears />
                 <div className="bookslist">
                     <button className="btn btn-green add-book"><i className="fa-solid fa-plus"></i> Toevoegen</button>

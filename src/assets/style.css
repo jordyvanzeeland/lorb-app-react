@@ -214,3 +214,7 @@ div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-pagi
     background: rgb(16, 115, 95);
     color: #ffffff;
 }
+
+.currentlyReading{
+    float: right;
+}
