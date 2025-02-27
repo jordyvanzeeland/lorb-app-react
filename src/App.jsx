@@ -4,8 +4,6 @@ import Login from './views/Login';
 import Bookslist from './views/Bookslist';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <Router>
       <Routes>

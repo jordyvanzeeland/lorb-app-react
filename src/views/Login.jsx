@@ -1,23 +1,18 @@
 import React, { useState } from "react";
+import { authenticate } from "../data/Auth";
 
 const Login = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const login = async (event) => {
+    const formHandler = async (event) => {
         event.preventDefault();
 
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
 
-        const user = await fetch(`http://localhost:8000/api/auth/login?email=${username}&password=${password}`, {
-                method: 'POST',
-            })
-            .then(response => response.json())
-            .then(data => {
-                return data;
-            })
+        const user = await authenticate(username, password);
 
         if(user.error){
             setHasError(true);
@@ -33,7 +28,7 @@ const Login = (props) => {
         <div className="container">
             <div className="login">
                 <a className="navbar-brand loginlogo" href="#" style={{ marginBottom: "30px", display: "block" }}><div className="icon">L</div>Library of Readed Books</a>
-                <form method="POST" className="loginform" onSubmit={(event) => login(event)}>
+                <form method="POST" className="loginform" onSubmit={(event) => formHandler(event)}>
                 <div className="form-group" style={{ marginBottom: "20px" }}>
                     <label className="form-check-label" htmlFor="username">E-mailadres</label>    
                     <input type="text" onChange={(event) => setUsername(event.target.value)} className="form-control" name="username" id="username" aria-describedby="emailHelp" />

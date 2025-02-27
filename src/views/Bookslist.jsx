@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import AddBook from "../components/AddBook";
 import ReadingYears from "../components/ReadingYears";
 import { getBooksByYear, currentlyReading } from "../data/Books";
+import withAuth from "../components/withAuth";
 
 const Bookslist = (props) => {
     const [books, setBooks] = useState([]);
@@ -15,7 +16,6 @@ const Bookslist = (props) => {
 
     const getCurrentReading = async () => {
         const currentBook = await currentlyReading();
-        console.log(currentBook);
         setCurrent(currentBook);
     }
 
@@ -88,4 +88,4 @@ const Bookslist = (props) => {
     )
 }
 
-export default Bookslist;
+export default withAuth(Bookslist);
